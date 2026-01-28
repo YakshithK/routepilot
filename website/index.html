@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b1020" />
+
+    <title>Route Pilot — Call an AI travel agent to find the cheapest weird route</title>
+    <meta
+      name="description"
+      content="Route Pilot is a conversational flight optimizer. Call an AI travel agent that finds the cheapest possible way to get you where you want—even if the route is weird."
+    />
+
+    <meta property="og:title" content="Route Pilot" />
+    <meta
+      property="og:description"
+      content="A conversational flight optimizer (not a flight search engine). Multi-city hacks, positioning flights, nearby airports, and time-vs-money reasoning."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="/" />
+
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./" aria-label="Route Pilot home">
+          <span class="brand-mark" aria-hidden="true">RP</span>
+          <span class="brand-name">Route Pilot</span>
+        </a>
+
+        <nav class="nav" aria-label="Primary">
+          <a class="nav-link" href="#how-it-works">How it works</a>
+          <a class="nav-link" href="#examples">Examples</a>
+          <a class="nav-link" href="#faq">FAQ</a>
+          <a class="nav-link" href="#cta">Call</a>
+        </nav>
+
+        <div class="header-cta">
+          <a class="pill" href="tel:+15550100247" aria-label="Call Route Pilot">
+            Call <span class="pill-strong">(555) 010-0247</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Conversational flight optimizer</p>
+            <h1>Call an AI travel agent that finds the cheapest way to get you there — even if the route is weird.</h1>
+            <p class="lede">
+              Route Pilot searches like a human deal-hunter: multi-city hacks, positioning flights, nearby airports,
+              overnight layovers vs hotel tradeoffs, and time vs money reasoning.
+            </p>
+
+            <div class="hero-actions" id="cta">
+              <a class="btn btn-primary" href="tel:+15550100247">
+                Call <span class="btn-strong">(555) 010-0247</span>
+              </a>
+              <a class="btn btn-secondary" href="#how-it-works">See how it works</a>
+            </div>
+
+            <p class="micro">
+              Placeholder number for now. When you call, you’ll talk to Route Pilot—no forms, no “exact dates required.”
+            </p>
+          </div>
+
+          <div class="hero-card" role="region" aria-label="Example conversation">
+            <div class="card-top">
+              <div class="dot dot-red" aria-hidden="true"></div>
+              <div class="dot dot-yellow" aria-hidden="true"></div>
+              <div class="dot dot-green" aria-hidden="true"></div>
+              <span class="card-title">Example call</span>
+            </div>
+            <div class="chat">
+              <div class="msg user">
+                “I need NYC → Tokyo in March. I’m flexible, but I can’t spend more than $850.”
+              </div>
+              <div class="msg bot">
+                “Got it. Are you open to nearby airports and an overnight layover if it saves money?”
+              </div>
+              <div class="msg user">“Yes — Newark/JFK/LGA are fine. I can do one overnight.”</div>
+              <div class="msg bot">
+                “Best value route: EWR → LAX (positioning) + LAX → NRT on a low-fare window. Total ~$742 + one cheap
+                hotel night. Want fastest option under $850 too?”
+              </div>
+            </div>
+            <div class="card-foot">
+              <span class="badge">Nearby airports</span>
+              <span class="badge">Multi-city hacks</span>
+              <span class="badge">Budget ceilings</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="how-it-works">
+        <div class="container">
+          <div class="section-head">
+            <h2>How Route Pilot works</h2>
+            <p>
+              Tell us your goal and constraints in plain language. Route Pilot explores tradeoffs and presents a few
+              winning itineraries with reasoning.
+            </p>
+          </div>
+
+          <div class="grid-3">
+            <article class="card">
+              <h3>1) You talk, not type</h3>
+              <p>Say what you want: budget ceiling, flexible dates, baggage rules, preferred airlines, or “no red-eyes.”</p>
+              <ul class="bullets">
+                <li><strong>Budget first</strong>: “Under $500” beats “March 12–15 only.”</li>
+                <li><strong>Constraints</strong>: visa, max stops, minimum layover, wheelchair needs.</li>
+              </ul>
+            </article>
+
+            <article class="card">
+              <h3>2) We search the weird routes</h3>
+              <p>Route Pilot hunts for value the way humans do: splits, positionings, and overlooked airports.</p>
+              <ul class="bullets">
+                <li><strong>Multi-city hacks</strong>: break trips into legs to unlock cheaper fare buckets.</li>
+                <li><strong>Positioning flights</strong>: fly to a different hub to catch a cheaper long-haul.</li>
+              </ul>
+            </article>
+
+            <article class="card">
+              <h3>3) You get options with reasoning</h3>
+              <p>Not just a price — Route Pilot explains time vs money, risks, and “why this is cheaper.”</p>
+              <ul class="bullets">
+                <li><strong>Overnight tradeoffs</strong>: pay $70 for a hotel to save $280 on airfare.</li>
+                <li><strong>Near-airport swaps</strong>: “SFO vs OAK” or “LHR vs LGW” when it matters.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-alt" id="examples">
+        <div class="container">
+          <div class="section-head">
+            <h2>What makes it different</h2>
+            <p>Google Flights is great at simple trips. Route Pilot is for the “make it cheaper somehow” moments.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="quote-card">
+              <h3>Nearby airports people don’t think of</h3>
+              <p class="quote">
+                “I can’t do $1,100. Find me the cheapest way.”
+              </p>
+              <p class="quote-meta">
+                Route Pilot checks alternates and ground connections when they’re worth it (and tells you when they’re not).
+              </p>
+            </div>
+
+            <div class="quote-card">
+              <h3>Time vs money reasoning</h3>
+              <p class="quote">
+                “I can do one stop, but only if I land before 9pm.”
+              </p>
+              <p class="quote-meta">
+                Route Pilot treats travel as an optimization problem, not a filter form.
+              </p>
+            </div>
+
+            <div class="quote-card">
+              <h3>Budget ceilings instead of exact dates</h3>
+              <p class="quote">
+                “Any weekend in April under $350.”
+              </p>
+              <p class="quote-meta">
+                You set the outcome. Route Pilot explores the date windows and the price cliffs.
+              </p>
+            </div>
+
+            <div class="quote-card">
+              <h3>Overnight layover vs hotel tradeoffs</h3>
+              <p class="quote">
+                “I’ll take a weird layover if it saves real money.”
+              </p>
+              <p class="quote-meta">
+                Route Pilot can propose “airfare + sleep” packages when it beats the direct flight.
+              </p>
+            </div>
+          </div>
+
+          <div class="cta-band">
+            <div>
+              <h3>Try it by phone</h3>
+              <p>Route Pilot works best in conversation: constraints, preferences, and tradeoffs in real time.</p>
+            </div>
+            <a class="btn btn-primary" href="tel:+15550100247">Call (555) 010-0247</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="faq">
+        <div class="container">
+          <div class="section-head">
+            <h2>FAQ</h2>
+            <p>Quick answers for now. This landing page is intentionally simple while the product evolves.</p>
+          </div>
+
+          <div class="faq">
+            <details class="faq-item">
+              <summary>Is this a flight search engine?</summary>
+              <p>No — it’s a <strong>conversational optimizer</strong>. You describe goals and constraints, and Route Pilot proposes cost-saving routes with reasoning.</p>
+            </details>
+
+            <details class="faq-item">
+              <summary>Can it handle multi-city and “positioning flights”?</summary>
+              <p>Yes. That’s the point: multi-city hacks, nearby airports, and “split the trip” strategies.</p>
+            </details>
+
+            <details class="faq-item">
+              <summary>What’s the phone number?</summary>
+              <p>
+                For now it’s a placeholder:
+                <a class="inline-link" href="tel:+15550100247">(555) 010-0247</a>.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="container footer-inner">
+          <div class="footer-left">
+            <div class="brand brand-footer">
+              <span class="brand-mark" aria-hidden="true">RP</span>
+              <span class="brand-name">Route Pilot</span>
+            </div>
+            <p class="footer-muted">A conversational flight optimizer.</p>
+          </div>
+          <div class="footer-right">
+            <a class="inline-link" href="tel:+15550100247">Call (555) 010-0247</a>
+            <span class="footer-sep" aria-hidden="true">·</span>
+            <a class="inline-link" href="#how-it-works">How it works</a>
+            <span class="footer-sep" aria-hidden="true">·</span>
+            <a class="inline-link" href="#faq">FAQ</a>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+
+
