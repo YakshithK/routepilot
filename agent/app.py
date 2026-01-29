@@ -2,6 +2,7 @@ import os
 from flask import Flask, jsonify, request
 from amadeus import Client, ResponseError
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -37,7 +38,7 @@ def compute_route_score(route, preferences):
 
 def summarize_route(route):
     segments = route.get("segments", [])
-    price.route.get("price")
+    price = route.get("price")
     currency = route.get("currency")
     total_minutes = route.get("total_travel_time_minutes", 0)
 
@@ -62,14 +63,14 @@ def summarize_route(route):
 
 @app.route("/flightsearch", methods=["POST"])
 def flightsearch():
-    data = request.get_json(silent=True) or {}
+    body = request.get_json(silent=True) or {}
 
-    origin = data.get("origin")
-    destination = data.get("destination")
-    departure_date = data.get("departure_date")
-    return_date = data.get("return_data")
-    adults = int(data.get("adults"))
-    currency = data.get("currency_code")
+    origin = body.get("origin")
+    destination = body.get("destination")
+    departure_date = body.get("departure_date")
+    return_date = body.get("return_date")
+    adults = int(body.get("adults"))
+    currency = body.get("currency_code")
     max_price = body.get("max_price")
     max_results = int(body.get("max_results"))
 
@@ -95,7 +96,7 @@ def flightsearch():
     try:
         response = amadeus.shopping.flight_offers_search.get(**params)
         data = response.data
-        print(data)
+
     except ResponseError as error:
         return jsonify({"error": str(error)}), 500
 
@@ -122,7 +123,8 @@ def flightsearch():
                         dt_dep = datetime.fromisoformat(dep_time)
                         dt_arr = datetime.fromisoformat(arr_time)
                         total_duration_minutes += int((dt_arr - dt_dep).total_seconds() / 60)
-                    except Exception:
+                    except Exception as e:
+                        print("error: ", e)
                         pass
 
                 segments_out.append({
@@ -134,7 +136,7 @@ def flightsearch():
                     "number": seg.get("number")
                 })
 
-        route = {
+        route_obj = {
             "id": f"route_{idx+1}",
             "price": total_price,
             "currency": currency,
@@ -156,7 +158,7 @@ def flightsearch():
     }
     return jsonify(response), 200
 
-@app.route("/_health", methods["GET"])
+@app.route("/_health", methods=["GET"])
 def _health():
     return jsonify({"status": "ok"}), 200
 
