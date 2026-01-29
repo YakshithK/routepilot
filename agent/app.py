@@ -17,13 +17,48 @@ amadeus = create_amadeus_client()
 app = Flask(__name__)
 
 def compute_route_score(route, preferences):
-    """
-    higher score -> better
-    """
+
+    #higher score -> better
 
     opt_for = preferences.get("optimize_for", "price")
     price = route.get("price", 0)
-    duration = route.
+    duration = route.get("total_travel_time_minutes", 0)
+
+    # normalize with simple constants
+    price_weight = 1.0 if opt_for == "price" else 0.7
+    time_weight = 1.0 if opt_for == "time" else 0.7
+
+    raw = price_weight * (price / 100.0) + time_weight * (duration / 60.0)
+
+    #convert to 0-1 scale
+    score = 1.0 / (1.0 + raw)
+
+    return score
+
+def summarize_route(route):
+    segments = route.get("segments", [])
+    price.route.get("price")
+    currency = route.get("currency")
+    total_minutes = route.get("total_travel_time_minutes", 0)
+
+    num_legs = len(segments)
+    stops = max(num_legs - 1, 0)
+    hours = total_minutes // 60
+    mins = total_minutes % 60
+
+    if not segments:
+        return f"Approximate price {price} {currency}."
+
+    origin = segments[0]["from"]
+    final = segments[-1]["to"]
+
+    base = f"{stops} stop{'s' if stops != 1 else ''}" if stops > 0 else "non-stop"
+    duration_text = f"{hours}h {mins}m" if total_minutes > 0 else "unknown duration"
+
+    return (
+        f"{base} trip from {origin} to {final}, about {duration_text}, "
+        f"total price around {price} {currency}."
+    )
 
 @app.route("/flightsearch", methods=["POST"])
 def flightsearch():
@@ -64,6 +99,7 @@ def flightsearch():
     except ResponseError as error:
         return jsonify({"error": str(error)}), 500
 
+    preferences = body.get("preferences") or {}
     routes = []
     for idx, offer in enumerate(data):
         price_info = offer.get("price", {})
@@ -98,15 +134,21 @@ def flightsearch():
                     "number": seg.get("number")
                 })
 
-        routes.append({
+        route = {
             "id": f"route_{idx+1}",
             "price": total_price,
             "currency": currency,
-            "totalTravelTimeMinutes": total_duration_minutes,
+            "total_travel_time_minutes": total_duration_minutes,
             "segments": segments_out,
             "score": 0.0,
             "summary": ""
-        })
+        }
+
+        route_obj["score"] = compute_route_score(route_obj, preferences)
+        route_obj["summary"] = summarize_route(route_obj)
+        routes.append(route_obj)
+
+    routes.sort(key=lambda r: r["score"], reverse=True)
 
     response = {
         "routes": routes,
