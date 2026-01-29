@@ -65,6 +65,8 @@ def summarize_route(route):
 def flightsearch():
     body = request.get_json(silent=True) or {}
 
+    print(body)
+
     origin = body.get("origin")
     destination = body.get("destination")
     departure_date = body.get("departure_date")
