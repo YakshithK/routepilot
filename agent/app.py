@@ -68,10 +68,10 @@ def flightsearch():
     origin = body.get("origin")
     destination = body.get("destination")
     departure_date = body.get("departure_date")
-    return_date = body.get("return_date")
+    return_date = body.get("return_date") or None
     adults = int(body.get("adults"))
     currency = body.get("currency_code")
-    max_price = body.get("max_price")
+    max_price = body.get("max_price") or None
     max_results = int(body.get("max_results"))
 
     if not origin or not destination or not departure_date:
