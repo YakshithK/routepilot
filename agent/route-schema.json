@@ -1,0 +1,51 @@
+{
+    "REQUEST_BODY" : 
+    {
+        "origin": "YYZ",
+        "destination": "LIS",
+        "departure_date": "2026-03-10",
+        "return_date": null,
+        "adults": 1,
+        "currency_code": "USD",
+        "max_price": 600,
+        "allow_nearby_airports": true,
+        "max_results": 10,
+        "preferences": {
+            "optimize_for": "price",
+            "carry_on_only": true,
+            "allow_overnight_layovers": true,
+            "allow_self_transfer": true
+        }
+    },
+
+    "RESPONSE_BODY" : {
+        "routes": [
+            {
+                "id": "route_1",
+                "price": 67.67,
+                "currency": "USD",
+                "total_travel_time_minutes": 6767,
+                "segments": [
+                    {
+                        "from": "YYZ",
+                        "to": "LIS",
+                        "carrierCode": "TP",
+                        "departure": "2026-03-10T21:00:00",
+                        "arrival": "2026-03-11T09:40:00"
+                    }
+                ],
+                "score": 0.82,
+                "summary": "Cheapest option: 1 stop, overnight layover, self-transfer allowed."
+            }
+        ],
+        "meta": {
+            "originLocationCode": "YYZ",
+            "destinatdestinationLocationCodeionQuery": "LIS",
+            "departureDate": "2026-03-01",
+            "adults": 1,
+            "currency_code": "USD",
+            "max_results": 2,
+            "search_time_ms": 420 
+        }
+    }
+}

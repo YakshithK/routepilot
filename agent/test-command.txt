@@ -1,8 +1,7 @@
 $body = @{
      origin = @("YYZ")
      destination = @("LIS")
-     date_from = "2026-03-01"
-     date_to = "2026-03-15"
+     departure_date = "2026-03-01"
  } | ConvertTo-Json
 
  Invoke-WebRequest `

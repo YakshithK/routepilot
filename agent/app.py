@@ -9,12 +9,21 @@ def create_amadeus_client():
     return Client(
         client_id=os.getenv("AMADEUS_API_KEY"),
         client_secret=os.getenv("AMADEUS_SECRET"),
-        hostname="test" if os.getenv("AMADEUS_ENV", "test") == "test" else "production"
+        hostname="test"
     )
 
 amadeus = create_amadeus_client()
 
 app = Flask(__name__)
+
+def compute_route_score(route, preferences):
+    """
+    higher score -> better
+    """
+
+    opt_for = preferences.get("optimize_for", "price")
+    price = route.get("price", 0)
+    duration = route.
 
 @app.route("/flightsearch", methods=["POST"])
 def flightsearch():
@@ -22,23 +31,31 @@ def flightsearch():
 
     origin = data.get("origin")
     destination = data.get("destination")
-    date_from = data.get("date_from")
-    date_to = data.get("date_to")
+    departure_date = data.get("departure_date")
+    return_date = data.get("return_data")
+    adults = int(data.get("adults"))
+    currency = data.get("currency_code")
+    max_price = body.get("max_price")
+    max_results = int(body.get("max_results"))
 
-    if not origin or not destination or not date_from or not date_to:
+    if not origin or not destination or not departure_date:
         return jsonify({
-            "error": "Missing required fields: origin, destination, date_from, date_to"
+            "error": "Missing required fields: origin, destination, departure_date"
         }), 400
 
     params = {
         "originLocationCode": origin,
         "destinationLocationCode": destination,
-        "departureDate": date_from,
-        "returnDate": date_to,
-        "adults": 1,
-        "currencyCode": "USD",
-        "max": 1 
+        "departureDate": departure_date,
+        "adults": adults,
+        "currencyCode": currency,
+        "max": max_results
     }
+
+    if return_date:
+        params["return_date"] = return_date
+    if max_price:
+        params["max_price"] = int(max_price)
 
     try:
         response = amadeus.shopping.flight_offers_search.get(**params)
@@ -84,7 +101,7 @@ def flightsearch():
         routes.append({
             "id": f"route_{idx+1}",
             "price": total_price,
-            "currency": "USD",
+            "currency": currency,
             "totalTravelTimeMinutes": total_duration_minutes,
             "segments": segments_out,
             "score": 0.0,
@@ -92,15 +109,14 @@ def flightsearch():
         })
 
     response = {
-        "search_params": {
-            "origin": origin,
-            "destination": destination,
-            "date_from": date_from,
-            "date_to": date_to
-        },
-        "options": routes
+        "routes": routes,
+        "meta": params
     }
     return jsonify(response), 200
+
+@app.route("/_health", methods["GET"])
+def _health():
+    return jsonify({"status": "ok"}), 200
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
