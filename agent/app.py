@@ -1,8 +1,14 @@
 import os
+import json
+import logging
 from flask import Flask, jsonify, request
 from amadeus import Client, ResponseError
 from dotenv import load_dotenv
 from datetime import datetime
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -64,8 +70,36 @@ def summarize_route(route):
 @app.route("/flightsearch", methods=["POST"])
 def flightsearch():
     body = request.get_json(silent=True) or {}
-
-    print(body)
+    
+    # Smart logging: log key fields separately + formatted JSON
+    logger.info("=" * 60)
+    logger.info("Flight Search Request Received")
+    logger.info("=" * 60)
+    
+    # Log individual key fields (always visible, won't truncate)
+    logger.info(f"Origin: {body.get('origin', 'NOT PROVIDED')}")
+    logger.info(f"Destination: {body.get('destination', 'NOT PROVIDED')}")
+    logger.info(f"Departure Date: {body.get('departure_date', 'NOT PROVIDED')}")
+    logger.info(f"Return Date: {body.get('return_date', 'NOT PROVIDED')}")
+    logger.info(f"Adults: {body.get('adults', 'NOT PROVIDED')}")
+    logger.info(f"Currency: {body.get('currency_code', 'NOT PROVIDED')}")
+    logger.info(f"Max Price: {body.get('max_price', 'NOT PROVIDED')}")
+    logger.info(f"Max Results: {body.get('max_results', 'NOT PROVIDED')}")
+    
+    # Log preferences if present
+    if body.get('preferences'):
+        logger.info(f"Preferences: {json.dumps(body.get('preferences'), indent=2)}")
+    
+    # Log full body as formatted JSON (may truncate in console, but structure is visible)
+    try:
+        body_str = json.dumps(body, indent=2, default=str)
+        logger.info("Full Request Body:")
+        logger.info(body_str)
+    except Exception as e:
+        logger.warning(f"Could not format body as JSON: {e}")
+        logger.info(f"Raw body: {body}")
+    
+    logger.info("=" * 60)
 
     origin = body.get("origin")
     destination = body.get("destination")
