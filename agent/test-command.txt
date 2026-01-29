@@ -1,0 +1,12 @@
+$body = @{
+     origin = @("YYZ")
+     destination = @("LIS")
+     date_from = "2026-03-01"
+     date_to = "2026-03-15"
+ } | ConvertTo-Json
+
+ Invoke-WebRequest `
+   -Uri "http://localhost:5000/flightsearch" `
+   -Method POST `
+   -ContentType "application/json" `
+   -Body $body
