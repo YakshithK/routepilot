@@ -70,6 +70,8 @@ def summarize_route(route):
 @app.route("/flightsearch", methods=["POST"])
 def flightsearch():
     body = request.get_json(silent=True) or {}
+
+    body = body.message.toolCalls[0].function.arguments
     
     # Smart logging: log key fields separately + formatted JSON
     logger.info("=" * 60)
