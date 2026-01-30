@@ -75,6 +75,7 @@ def flightsearch():
         if isinstance(raw_body, dict):
             if "message" in raw_body and "toolCalls" in raw_body["message"]:
                 tool_calls = raw_body["message"]["toolCalls"]
+                print(tool_calls[0])
                 if tool_calls and len(tool_calls) > 0:
                     if "function" in tool_calls[0] and "arguments" in tool_calls[0]["function"]:
                         arguments = tool_calls[0]["function"]["arguments"]
@@ -189,11 +190,23 @@ def flightsearch():
 
     routes.sort(key=lambda r: r["score"], reverse=True)
 
-    response = {
+    result = {
         "routes": routes,
         "meta": params
     }
+    
     print(routes)
+
+    response = {
+        "results": [
+            {
+                "name": "flightsearch",
+                "toolCallId": tool_call_id,
+                "result": result
+            }
+        ]
+    }
+
     return jsonify(response), 200
 
 @app.route("/_health", methods=["GET"])
@@ -203,3 +216,5 @@ def _health():
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=False)
+
+    
