@@ -71,7 +71,36 @@ def summarize_route(route):
 def flightsearch():
     raw_body = request.get_json(silent=True) or {}
 
-    body = json.loads(raw_body["message"]["toolCalls"][0]["function"]["arguments"])
+    try:
+        if isinstance(raw_body, dict):
+            if "message" in raw_body and "toolCalls" in raw_body["message"]:
+                tool_calls = raw_body["message"]["toolCalls"]
+                if tool_calls and len(tool_calls) > 0:
+                    if "function" in tool_calls[0] and "arguments" in tool_calls[0]["function"]:
+                        arguments = tool_calls[0]["function"]["arguments"]
+                        if isinstance(arguments, str):
+                            body = json.loads(arguments)
+                        else:
+                            body = arguments
+                        logger.info("Extracted arguments from VAPI tool call structure")
+                    else:
+                        logger.warning("No 'function.arguments' found in tool call")
+                        body = raw_body
+                else:
+                    logger.warning("No tool calls found in message")
+                    body = raw_body
+            else:
+                body = raw_body
+                logger.info("Using request body directly (not VAPI webhook structure)")
+        else:
+            body = raw_body
+            logger.warning(f"Unexpected body type: {type(raw_body)}")
+    except (KeyError, IndexError, json.JSONDecodeError) as e:
+        logger.error(f"Error extracting arguments: {e}")
+        logger.info("Falling back to raw body")
+        body = raw_body
+    
+    logger.info("-" * 60)
 
     origin = body.get("origin")
     destination = body.get("destination")
