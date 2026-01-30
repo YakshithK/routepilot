@@ -71,11 +71,13 @@ def summarize_route(route):
 def flightsearch():
     raw_body = request.get_json(silent=True) or {}
 
+    tool_call_id = ""
+
     try:
         if isinstance(raw_body, dict):
             if "message" in raw_body and "toolCalls" in raw_body["message"]:
                 tool_calls = raw_body["message"]["toolCalls"]
-                print(tool_calls[0])
+                tool_call_id = tool_calls[0]["id"]
                 if tool_calls and len(tool_calls) > 0:
                     if "function" in tool_calls[0] and "arguments" in tool_calls[0]["function"]:
                         arguments = tool_calls[0]["function"]["arguments"]
@@ -195,7 +197,7 @@ def flightsearch():
         "meta": params
     }
     
-    print(routes)
+    print(routes, " ", tool_call_id)
 
     response = {
         "results": [
