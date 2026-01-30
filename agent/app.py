@@ -70,79 +70,8 @@ def summarize_route(route):
 @app.route("/flightsearch", methods=["POST"])
 def flightsearch():
     raw_body = request.get_json(silent=True) or {}
-    
-    # Smart logging: log raw request first to understand structure
-    logger.info("=" * 60)
-    logger.info("Flight Search Request Received")
-    logger.info("=" * 60)
-    logger.info("Raw Request Body Structure:")
-    try:
-        logger.info(json.dumps(raw_body, indent=2, default=str))
-    except Exception as e:
-        logger.warning(f"Could not format raw body: {e}")
-        logger.info(f"Raw body type: {type(raw_body)}")
-        logger.info(f"Raw body: {raw_body}")
-    
-    # Extract function arguments from VAPI webhook structure
-    # VAPI sends: { "message": { "toolCalls": [{ "function": { "arguments": {...} } }] } }
-    try:
-        if isinstance(raw_body, dict):
-            # Try VAPI webhook structure
-            if "message" in raw_body and "toolCalls" in raw_body["message"]:
-                tool_calls = raw_body["message"]["toolCalls"]
-                if tool_calls and len(tool_calls) > 0:
-                    if "function" in tool_calls[0] and "arguments" in tool_calls[0]["function"]:
-                        # Arguments might be a string (JSON) or dict
-                        arguments = tool_calls[0]["function"]["arguments"]
-                        if isinstance(arguments, str):
-                            body = json.loads(arguments)
-                        else:
-                            body = arguments
-                        logger.info("Extracted arguments from VAPI tool call structure")
-                    else:
-                        logger.warning("No 'function.arguments' found in tool call")
-                        body = raw_body
-                else:
-                    logger.warning("No tool calls found in message")
-                    body = raw_body
-            else:
-                # Assume body is already the arguments (direct call)
-                body = raw_body
-                logger.info("Using request body directly (not VAPI webhook structure)")
-        else:
-            body = raw_body
-            logger.warning(f"Unexpected body type: {type(raw_body)}")
-    except (KeyError, IndexError, json.JSONDecodeError) as e:
-        logger.error(f"Error extracting arguments: {e}")
-        logger.info("Falling back to raw body")
-        body = raw_body
-    
-    logger.info("-" * 60)
-    
-    # Log individual key fields (always visible, won't truncate)
-    logger.info(f"Origin: {body.get('origin', 'NOT PROVIDED')}")
-    logger.info(f"Destination: {body.get('destination', 'NOT PROVIDED')}")
-    logger.info(f"Departure Date: {body.get('departure_date', 'NOT PROVIDED')}")
-    logger.info(f"Return Date: {body.get('return_date', 'NOT PROVIDED')}")
-    logger.info(f"Adults: {body.get('adults', 'NOT PROVIDED')}")
-    logger.info(f"Currency: {body.get('currency_code', 'NOT PROVIDED')}")
-    logger.info(f"Max Price: {body.get('max_price', 'NOT PROVIDED')}")
-    logger.info(f"Max Results: {body.get('max_results', 'NOT PROVIDED')}")
-    
-    # Log preferences if present
-    if body.get('preferences'):
-        logger.info(f"Preferences: {json.dumps(body.get('preferences'), indent=2)}")
-    
-    # Log full body as formatted JSON (may truncate in console, but structure is visible)
-    try:
-        body_str = json.dumps(body, indent=2, default=str)
-        logger.info("Full Request Body:")
-        logger.info(body_str)
-    except Exception as e:
-        logger.warning(f"Could not format body as JSON: {e}")
-        logger.info(f"Raw body: {body}")
-    
-    logger.info("=" * 60)
+
+    body = json.loads(raw_body["message"]["toolCalls"][0]["function"]["arguments"])
 
     origin = body.get("origin")
     destination = body.get("destination")
@@ -235,6 +164,7 @@ def flightsearch():
         "routes": routes,
         "meta": params
     }
+    print(routes)
     return jsonify(response), 200
 
 @app.route("/_health", methods=["GET"])
